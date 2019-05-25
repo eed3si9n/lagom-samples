@@ -11,7 +11,9 @@ BUILD_TOOL=$2
 if [ "$BUILD_TOOL" == "sbt" ]; then
     bin/runSbtJob $SHOPPING_CART_SOURCES test 
 elif [ "$BUILD_TOOL" == "maven" ]; then
-    mvn -f $SHOPPING_CART_SOURCES test 
+    # we need to pass org.jboss.logging.provider=slf4j, otherwise jboss logging, 
+    # used by hibernate, will try to bind to log4j
+    mvn -f $SHOPPING_CART_SOURCES -Dorg.jboss.logging.provider=slf4j test 
 else
     echo "unknown build tool [$BUILD_TOOL]"
     exit 1
